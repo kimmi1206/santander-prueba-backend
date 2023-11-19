@@ -48,7 +48,7 @@ public class ProductoService implements IProductoService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Producto save(Producto producto) {
-        if (productoRepository.existsByName(producto.getNombre()))
+        if (productoRepository.existsByNombre(producto.getNombre()))
             throw new ProductoAlreadyExistsException();
 
         return Optional.of(productoRepository.save(producto))
@@ -59,6 +59,6 @@ public class ProductoService implements IProductoService {
     public String delete(long id) {
         productoRepository.delete(findByProductoId(id));
         if (productoRepository.existsById(id)) throw new ProductoNotDeletedException();
-        return "{\"productDeleted\": true}";
+        return "{\"productIsDeleted\": true}";
     }
 }
