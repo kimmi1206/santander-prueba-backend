@@ -45,8 +45,6 @@ public class ProductoController {
     @DeleteMapping(value = "/delete/{productoId}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> delete(@PathVariable long productoId) {
-        String result = "{\"productDeleted\": " +
-                productoService.delete(productoId) + "}";
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(productoService.delete(productoId));
     }
 }

@@ -2,6 +2,7 @@ package com.santander.products.service;
 
 import com.santander.products.exception.ProductNotFoundException;
 import com.santander.products.exception.ProductoAlreadyExistsException;
+import com.santander.products.exception.ProductoNotDeletedException;
 import com.santander.products.exception.ProductoNotSavedException;
 import com.santander.products.model.entity.Producto;
 import com.santander.products.repository.ProductoRepository;
@@ -47,16 +48,17 @@ public class ProductoService implements IProductoService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Producto save(Producto producto) {
-        if (productoRepository.existsById(producto.getProductoId()))
+        if (productoRepository.existsByName(producto.getNombre()))
             throw new ProductoAlreadyExistsException();
-        
+
         return Optional.of(productoRepository.save(producto))
                 .orElseThrow(ProductoNotSavedException::new);
     }
 
     @Override
-    public boolean delete(long id) {
+    public String delete(long id) {
         productoRepository.delete(findByProductoId(id));
-        return !productoRepository.existsById(id);
+        if (productoRepository.existsById(id)) throw new ProductoNotDeletedException();
+        return "{\"productDeleted\": true}";
     }
 }

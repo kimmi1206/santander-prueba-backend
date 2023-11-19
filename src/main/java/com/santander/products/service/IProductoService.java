@@ -14,6 +14,6 @@ public interface IProductoService {
 
     Producto save(Producto producto);
 
-    boolean delete(long id);
+    String delete(long id);
 
 }

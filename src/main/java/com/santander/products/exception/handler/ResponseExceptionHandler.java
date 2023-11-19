@@ -2,6 +2,7 @@ package com.santander.products.exception.handler;
 
 import com.santander.products.exception.ProductNotFoundException;
 import com.santander.products.exception.ProductoAlreadyExistsException;
+import com.santander.products.exception.ProductoNotDeletedException;
 import com.santander.products.exception.ProductoNotSavedException;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -74,6 +75,19 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("message", "Producto No Guardado");
 
         LOGGER.error("ERROR: ProductoNotSavedException --> Class, Method, Line Number: {}",
+                Arrays.stream(ex.getStackTrace()).limit(5).toList());
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ProductoNotDeletedException.class)
+    public ResponseEntity<Object> handleProductoNotDeletedException(
+            ProductoNotDeletedException ex, WebRequest request) {
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "Producto No Eliminado");
+
+        LOGGER.error("ERROR: ProductoNotDeletedException --> Class, Method, Line Number: {}",
                 Arrays.stream(ex.getStackTrace()).limit(5).toList());
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
